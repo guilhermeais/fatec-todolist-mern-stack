@@ -1,14 +1,12 @@
 const path = require('path');
 const express = require('express');
 const bodyParser = require('body-parser');
+const cors = require('cors')
+require('dotenv').config()
 
 console.log('environment    ', process.env.ENVIRONMENT)
 console.log('PORT    ', process.env.PORT)
 console.log('MONGO_CONNECTION_STRING    ', process.env.MONGO_CONNECTION_STRING)
-if(process.env.ENVIRONMENT !== 'production') {
-    require('dotenv').config()
-}
-
 
 const taskController = require('./controller/task.controller')
 
@@ -19,7 +17,7 @@ const port = process.env.PORT || 3080;
 
 app.use(express.static(path.join(__dirname, './ui/build')));
 app.use(bodyParser.json());
-
+app.use(cors());
 app.get('/api/tasks', (req, res) => {
     taskController.getTasks().then(data => res.json(data));
 });
